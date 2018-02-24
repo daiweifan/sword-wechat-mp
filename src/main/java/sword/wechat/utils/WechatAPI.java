@@ -82,16 +82,61 @@ public class WechatAPI {
 	 * @return
 	 */
 	public static String getAccessToken() {
-		System.out.println(ContextLoader.getCurrentWebApplicationContext());
-		System.out.println(ContextLoader.getCurrentWebApplicationContext().getServletContext());
-		AccessToken at = (AccessToken) ContextLoader.getCurrentWebApplicationContext().getServletContext()
-				.getAttribute(WxConsts.APPID);
-		if (at == null||!at.isAvailable()) {
-			refreshAccessToken();
-			return ((AccessToken) ContextLoader.getCurrentWebApplicationContext().getServletContext().getAttribute(
-					WxConsts.APPID)).getToken();
-		}
-		return at.getToken();
+		
+		   
+		  System.out.println("====================获取token开始==============================");
+		 
+			String url = mergeUrl(WxConsts.GET_TOKEN, WxConsts.APPID, WxConsts.APPSECRET);
+		 
+		    String accessToken = null;
+		    String expiresIn = null;
+		 
+		    try {
+		 
+		      URL urlGet = new URL(url);
+		 
+		      HttpURLConnection http = (HttpURLConnection) urlGet.openConnection();
+		 
+		      http.setRequestMethod("GET"); // 必须是get方式请求
+		 
+		      http.setRequestProperty("Content-Type",
+		 
+		          "application/x-www-form-urlencoded");
+		 
+		      http.setDoOutput(true);
+		 
+		      http.setDoInput(true);
+		 
+		      http.connect();
+		 
+		      InputStream is = http.getInputStream();
+		 
+		      int size = is.available();
+		 
+		      byte[] jsonBytes = new byte[size];
+		 
+		      is.read(jsonBytes);
+		 
+		      String message = new String(jsonBytes, "UTF-8");
+		 
+		      JSONObject demoJson = JSONObject.fromObject(message);
+		 
+		      accessToken = demoJson.getString("access_token");
+		      expiresIn = demoJson.getString("expires_in");
+		 
+		      System.out.println("accessToken===="+accessToken);
+		      System.out.println("expiresIn==="+expiresIn);
+		      System.out.println("====================获取token结束==============================");
+		 
+		      is.close();
+		 
+		    } catch (Exception e) {
+		 
+		      e.printStackTrace();
+		 
+		    }
+		 
+		    return accessToken;
 	}
 
 	/**
@@ -134,10 +179,9 @@ public class WechatAPI {
 	public static void initMenu() {
 		
 		Menu wdzh = new Menu("账户查询");
-		//Menu zhbdjc = new Menu("账户解除", EventType.CLICK.name(), "10");  
 	
 
-
+		Menu djsj = new Menu("点击事件", EventType.CLICK.name(), "11");
 		Menu dwzhbd = new Menu("单位账户绑定", EventType.VIEW.name(), String.format(WxConsts.WX_OAUTH2_URL, WxConsts.APPID,
 				URLEncoder.encode(WxConsts.APPDOMAIN + "/gjj_logon_dw.do")));
 		Menu ywcx = new Menu("个人公积金查询", EventType.VIEW.name(), String.format(WxConsts.WX_OAUTH2_URL, WxConsts.APPID,
@@ -146,7 +190,7 @@ public class WechatAPI {
 				URLEncoder.encode(WxConsts.APPDOMAIN + "/wx_oauth2_qinghai.do")));
 		Menu zhjb = new Menu("账户解绑", EventType.VIEW.name(), String.format(WxConsts.WX_OAUTH2_URL, WxConsts.APPID,
 				URLEncoder.encode(WxConsts.APPDOMAIN + "/gjj_logout.do")));
-		wdzh.setSub_button(Arrays.asList(dwzhbd,ywcx,ywbl,zhjb));
+		wdzh.setSub_button(Arrays.asList(djsj,dwzhbd,ywcx,ywbl,zhjb));
 		
 		
 		Menu wgjj = new Menu("业务指南"); 
@@ -159,7 +203,6 @@ public class WechatAPI {
 
 		
 		Menu bmfw = new Menu("便民服务");
-/*		Menu mmsz = new Menu("修改密码", EventType.CLICK.name(), "11");*/
 		Menu llb = new Menu("利率表", EventType.VIEW.name(), WxConsts.APPDOMAIN + "/gjj_llb.do");
 		Menu wyb = new Menu("万元表",  EventType.VIEW.name(), WxConsts.APPDOMAIN + "/gjj_wyb.do");
 		Menu hkjess = new Menu("还款金额试算", EventType.VIEW.name(), WxConsts.APPDOMAIN + "/gjj_yhje.do");
@@ -490,6 +533,7 @@ public static String httpRequest(String url, String method, String body) {
 		ApiResult.create(httpRequest(url, "POST", body));
 		
 	}
+
 
 	
 

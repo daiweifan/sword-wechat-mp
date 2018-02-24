@@ -69,7 +69,6 @@ public class WechatController {
 
 		// 调用核心业务类接收消息、处理消息
 		String respMessage = a.processRequest(request);
-		logger.info("\n组装回复信息：{}", respMessage);
 		return respMessage;
 	}
 

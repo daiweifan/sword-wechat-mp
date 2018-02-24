@@ -243,7 +243,7 @@ public class CoreService  {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		logger.info("微信被动回复消息："+resMsg);
+		logger.info("\n微信被动回复消息：{}", resMsg);
 		return resMsg;
 	}
 
