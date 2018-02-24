@@ -1,7 +1,6 @@
 package sword.wechat.controller;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -12,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -60,7 +60,8 @@ public class WechatController {
 	/**
 	 * 处理微信服务器发来的消息
 	 */
-	public void doPost(HttpServletRequest request, HttpServletResponse response)
+    @PostMapping(produces = "application/xml; charset=UTF-8")
+	public String doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		// 将请求、响应的编码均设置为UTF-8（防止中文乱码）
 		request.setCharacterEncoding("UTF-8");
@@ -68,11 +69,8 @@ public class WechatController {
 
 		// 调用核心业务类接收消息、处理消息
 		String respMessage = a.processRequest(request);
-
-		// 响应消息
-		PrintWriter out = response.getWriter();
-		out.print(respMessage);
-		out.close();
+		logger.info("\n组装回复信息：{}", respMessage);
+		return respMessage;
 	}
 
 

@@ -5,10 +5,10 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -21,11 +21,8 @@ import sword.wechat.common.WxConsts;
 import sword.wechat.entity.api.Follower;
 import sword.wechat.entity.message.Article;
 import sword.wechat.entity.message.BaseMessage;
-import sword.wechat.entity.message.Image;
-import sword.wechat.entity.message.ImageMessage;
 import sword.wechat.entity.message.NewsMessage;
 import sword.wechat.entity.message.TextMessage;
-import sword.wechat.utils.MapCacheManager;
 import sword.wechat.utils.MessageUtil;
 import sword.wechat.utils.WechatAPI;
 
@@ -35,7 +32,7 @@ public class CoreService  {
 	
 
 	
-	private static Logger log = LoggerFactory.getLogger(CoreService.class);
+	private static Logger logger = LoggerFactory.getLogger(CoreService.class);
 
 	/**
 	 * 处理微信发来的请求
@@ -43,7 +40,7 @@ public class CoreService  {
 	 * @param request
 	 * @return
 	 */
-	@SuppressWarnings({ "unchecked", "unused", "deprecation" })
+	@SuppressWarnings({ "unused", "deprecation" })
 	public  String processRequest(HttpServletRequest request) {
 		
 		String resMsg = null;
@@ -63,7 +60,13 @@ public class CoreService  {
 			// 消息类型
 			String msgType = requestMap.get("MsgType");
 
-
+			// 回复文本消息
+			TextMessage replyText = new TextMessage();
+			replyText.setToUserName(fromUserName);
+			replyText.setFromUserName(toUserName);
+			replyText.setCreateTime(new Date().getTime());
+			replyText.setMsgType(WxConsts.XML_MSG_TEXT);
+			replyText.setFuncFlag(0);
 			
 			// 文本消息
 			if (msgType.equals(WxConsts.XML_MSG_TEXT)) {
@@ -82,89 +85,12 @@ public class CoreService  {
 				if(null == content || "".equals(content))
 				{
 					textMessage.setContent("");
+				}else{
+					textMessage.setContent("已接受到你的消息："+content);
 				}
+				resMsg = MessageUtil.textMessageToXml(textMessage);
+			
 				
-				 MapCacheManager cache = MapCacheManager.getInstance();  
-			        Map<String, Object> cacheMap = new ConcurrentHashMap<String, Object>();  
-                    cacheMap = cache.getMapCache(); 
-                  List<Map<String,Object>>  list =  (List<Map<String,Object>>)cacheMap.get("zdyd"); 
-                  String titlenull = "";
-                  String ydnrnull="";
-                  String mediaidnull="";
-                  String flag = "0";
-                  for (Map<String,Object> map:list){
-                	  
-                	String title = map.get("title").toString();
-                	String ydnr = map.get("nrnew").toString();
-					String mediaid = map.get("mediaid")==null?"":map.get("mediaid").toString();
-					if(title.equals("-1")){
-						 titlenull = map.get("title").toString();
-	                	 ydnrnull = map.get("nrnew").toString();
-						 mediaidnull = map.get("mediaid")==null?"":map.get("mediaid").toString();
-						
-					}
-                	
-                	String[] titlemx = title.split("/");
-                	for(String s:titlemx){
-                		if(s.equals(content)){
-                			flag = "1";
-                			if(null !=ydnr && !"".equals(ydnr))
-            					{
-            						ydnr = ydnr.replaceAll("&amp;", "&");
-            						ydnr = ydnr.replaceAll("&quot;", "\"");
-            						ydnr = ydnr.replace("&nbsp;", "");
-            						ydnr = ydnr.replaceAll("&lt;", "<");
-            						ydnr = ydnr.replaceAll("&gt;", ">");
-            						ydnr = ydnr.replaceAll("<(?!a|/a)[^>]*>","");
-            						textMessage.setContent(ydnr);
-            						
-            						resMsg = MessageUtil.textMessageToXml(textMessage);
-            					}else
-            					{
-            						ImageMessage imageMessage = new ImageMessage(requestMap);
-            						imageMessage.setMsgType("image");
-            						Image image = new Image();
-            						image.setMediaId(mediaid);
-            						imageMessage.setImage(image);
-            
-            						resMsg = MessageUtil.imageMessageToXml(imageMessage);
-            					}
-                			
-                			
-                		 break;
-                		}
-                		
-                		
-                	}
-                	
-                	
-                  }
-                  
-                  if (flag.equals("0")){
-                	  if(null !=ydnrnull && !"".equals(ydnrnull))
-  					{
-  						ydnrnull = ydnrnull.replaceAll("&amp;", "&");
-  						ydnrnull = ydnrnull.replaceAll("&quot;", "\"");
-  						ydnrnull = ydnrnull.replace("&nbsp;", "");
-  						ydnrnull = ydnrnull.replaceAll("&lt;", "<");
-  						ydnrnull = ydnrnull.replaceAll("&gt;", ">");
-  						ydnrnull = ydnrnull.replaceAll("<(?!a|/a)[^>]*>","");
-  						textMessage.setContent(ydnrnull);
-  						
-  						resMsg = MessageUtil.textMessageToXml(textMessage);
-  					}else
-  					{
-  						ImageMessage imageMessage = new ImageMessage(requestMap);
-  						imageMessage.setMsgType("image");
-  						Image image = new Image();
-  						image.setMediaId(mediaidnull);
-  						imageMessage.setImage(image);
-  
-  						resMsg = MessageUtil.imageMessageToXml(imageMessage);
-  					}
-                	  
-                	  
-                  }					
 			}else if (msgType.equals(WxConsts.XML_MSG_EVENT)) {
 				
 				//获取事件类型
@@ -186,7 +112,7 @@ public class CoreService  {
 					
 				}else if (eventType.equals(WxConsts.EVT_UNSUBSCRIBE)) {
 					// TODO 取消订阅后用户再收不到公众号发送的消息，因此不需要回复消息
-					log.info("用户【"+fromUserName+"】取消关注公众号！");
+					logger.info("用户【"+fromUserName+"】取消关注公众号！");
 					
 				}else if (eventType.equals(WxConsts.EVT_CLICK)) {
 					
@@ -286,20 +212,38 @@ public class CoreService  {
 							textMsg.setMsgType("text");
 							resMsg = MessageUtil.textMessageToXml(textMsg);
 					}
-						
-						
-						
-						
-
-					}
-
+				  }
 				}
+			}
+			// 图片消息
+			else if (msgType.equals(WxConsts.XML_MSG_IMAGE)) {
+				respContent = "您发送的是图片消息！";
+				replyText.setContent(respContent);
+				resMsg = MessageUtil.textMessageToXml(replyText);
+			}
+			// 地理位置消息
+			else if (msgType.equals(WxConsts.XML_MSG_LOCATION)) {
+				respContent = "您发送的是地理位置消息！";
+				replyText.setContent(respContent);
+				resMsg = MessageUtil.textMessageToXml(replyText);
+			}
+			// 链接消息
+			else if (msgType.equals(WxConsts.XML_MSG_LINK)) {
+				respContent = "您发送的是链接消息！";
+				replyText.setContent(respContent);
+				resMsg = MessageUtil.textMessageToXml(replyText);
+			}
+			// 音频消息
+			else if (msgType.equals(WxConsts.XML_MSG_VIDEO)) {
+				respContent = "您发送的是音频消息！";
+				replyText.setContent(respContent);
+				resMsg = MessageUtil.textMessageToXml(replyText);
 			}
 
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		System.out.println("微信被动回复消息："+resMsg);
+		logger.info("微信被动回复消息："+resMsg);
 		return resMsg;
 	}
 

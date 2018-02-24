@@ -3,6 +3,8 @@ package sword;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import sword.wechat.utils.WechatAPI;
+
 
 @SpringBootApplication
 public class StartApplication {
@@ -26,6 +28,6 @@ public class StartApplication {
   public static void main(String[] args) {
     SpringApplication.run(StartApplication.class, args);
 	//初始化菜单
-//	WechatAPI.initMenu();
+	WechatAPI.initMenu();
   }
 }
