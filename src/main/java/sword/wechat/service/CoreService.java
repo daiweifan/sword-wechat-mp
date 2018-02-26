@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import sun.misc.BASE64Encoder;
 import sword.wechat.common.WxConsts;
+import sword.wechat.entity.ApiResult;
 import sword.wechat.entity.api.Follower;
 import sword.wechat.entity.message.Article;
 import sword.wechat.entity.message.BaseMessage;
@@ -179,20 +180,32 @@ public class CoreService  {
 
 					} else if (eventKey.equals("12")) {
 						
-						NewsMessage newsMsg=new NewsMessage(new BaseMessage(requestMap));
-	
-						List<Article> lstArticle=new ArrayList<Article>();
-						Article article = new Article();
-
-						article.setTitle("使用帮助");
-						article.setDescription(getzn());
-						article.setUrl(null);
-
-						lstArticle.add(article);
-
-						newsMsg.setArticles(lstArticle);
-						newsMsg.setCount(lstArticle.size());
-						resMsg = MessageUtil.newsMessageToXml(newsMsg);
+						//发送模板消息
+						ApiResult ar=null;
+						String jsonbody="{\"touser\": \"%s\",\"template_id\": \"%s\",\"data\":%s}";
+					    
+						String openid="ohqTZ0d8zD2IB6VcxUcojiqkwvFo";
+						//模板内容
+						String mbnr ="{\"first\": {"+
+				                       "\"value\":\"测试业务\","+
+				                       "\"color\":\"#173177\""+
+				                   "},"+
+				                   "\"keyword1\":{"+
+				                       "\"value\":\"戴先生\","+
+				                       "\"color\":\"#173177\""+
+				                   "},"+
+				                   "\"keyword2\": {"+
+				                       "\"value\":\"39.8元\","+
+				                       "\"color\":\"#173177\""+
+				                   "},"+
+				                   "\"remark\":{"+
+				                       "\"value\":\""+new Date()+"\","+
+				                       "\"color\":\"#173177\""+
+				                   "}"+
+				           "}";
+						String mbid ="-sw3z8Rn-hYVF9pozGzHBb_XdmyduBxqqYfvuPKnSpI";//模板id
+						jsonbody=String.format(jsonbody, new Object[]{openid,mbid,mbnr});
+						ar = WechatAPI.sendTemplateMsg(jsonbody);
 
 					}else if (eventKey.equals("99")) {
 						

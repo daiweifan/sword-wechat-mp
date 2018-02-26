@@ -178,19 +178,20 @@ public class WechatAPI {
 	@SuppressWarnings("deprecation")
 	public static void initMenu() {
 		
-		Menu wdzh = new Menu("账户查询");
+		Menu wdzh = new Menu("测试功能");
 	
 
 		Menu djsj = new Menu("点击事件", EventType.CLICK.name(), "11");
-		Menu dwzhbd = new Menu("单位账户绑定", EventType.VIEW.name(), String.format(WxConsts.WX_OAUTH2_URL, WxConsts.APPID,
+		Menu fsmbxx = new Menu("发送模板信息", EventType.CLICK.name(), "12");
+/*		Menu dwzhbd = new Menu("单位账户绑定", EventType.VIEW.name(), String.format(WxConsts.WX_OAUTH2_URL, WxConsts.APPID,
 				URLEncoder.encode(WxConsts.APPDOMAIN + "/gjj_logon_dw.do")));
 		Menu ywcx = new Menu("个人公积金查询", EventType.VIEW.name(), String.format(WxConsts.WX_OAUTH2_URL, WxConsts.APPID,
 				URLEncoder.encode(WxConsts.APPDOMAIN + "/wx_oauth2.do")));
 		Menu ywbl = new Menu("个人业务办理", EventType.VIEW.name(), String.format(WxConsts.WX_OAUTH2_URL, WxConsts.APPID,
 				URLEncoder.encode(WxConsts.APPDOMAIN + "/wx_oauth2_qinghai.do")));
 		Menu zhjb = new Menu("账户解绑", EventType.VIEW.name(), String.format(WxConsts.WX_OAUTH2_URL, WxConsts.APPID,
-				URLEncoder.encode(WxConsts.APPDOMAIN + "/gjj_logout.do")));
-		wdzh.setSub_button(Arrays.asList(djsj,dwzhbd,ywcx,ywbl,zhjb));
+				URLEncoder.encode(WxConsts.APPDOMAIN + "/gjj_logout.do")));*/
+		wdzh.setSub_button(Arrays.asList(djsj,fsmbxx));
 		
 		
 		Menu wgjj = new Menu("业务指南"); 
