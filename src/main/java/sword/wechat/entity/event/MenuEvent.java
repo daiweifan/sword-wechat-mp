@@ -4,7 +4,7 @@ import java.util.Map;
 
 /**
  * 菜单事件类型
- * @author dongwei
+ * @author david
  *
  */
 public class MenuEvent extends BaseEvent {

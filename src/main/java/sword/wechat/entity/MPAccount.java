@@ -2,7 +2,7 @@ package sword.wechat.entity;
 
 /**
  * 微信公众号信息
- * @author dongwei
+ * @author david
  *
  */
 public class MPAccount {

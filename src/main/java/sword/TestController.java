@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.ModelAndView;
 
 import sword.wechat.entity.ApiResult;
 import sword.wechat.utils.WechatAPI;
@@ -26,9 +27,17 @@ public class TestController {
 	@RequestMapping(value="/index",method=RequestMethod.GET)
 	public String index(){
 		logger.info(new Date()+"测试页面");
-		return "测试页面";
+		return "index";
 	}
 
+	@RequestMapping("/index1")
+	public ModelAndView index1(){
+		ModelAndView mav = new ModelAndView();
+		logger.info(new Date()+"测试页面1");
+		mav.setViewName("index");
+		return mav;
+	}
+	
 	/**
 	 * 测试例子
 	* @Title: main 

@@ -4,7 +4,7 @@ import java.util.Map;
 
 /**
  * 事件消息
- * @author dongwei
+ * @author david
  *
  */
 public class BaseEvent {

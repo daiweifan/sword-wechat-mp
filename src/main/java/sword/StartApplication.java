@@ -28,6 +28,6 @@ public class StartApplication {
   public static void main(String[] args) {
     SpringApplication.run(StartApplication.class, args);
 	//初始化菜单
-	WechatAPI.initMenu();
+//	WechatAPI.initMenu();
   }
 }
