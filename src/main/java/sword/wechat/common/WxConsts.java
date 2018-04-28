@@ -14,7 +14,7 @@ public class WxConsts {
 	
 	public static String APPID="wx8110a8b1450afc40";
 	public static String APPSECRET="bb3e7c8a0644bd3eb62a9859faba9a5d";
-	public static String APPDOMAIN="https://david0303.tunnel.qydev.com";
+	public static String APPDOMAIN="http://david.free.ngrok.cc";
 	public static String token ="david";
 	
 		

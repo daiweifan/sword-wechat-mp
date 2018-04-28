@@ -184,7 +184,7 @@ public class CoreService  {
 						ApiResult ar=null;
 						String jsonbody="{\"touser\": \"%s\",\"template_id\": \"%s\",\"data\":%s}";
 					    
-						String openid="ohqTZ0d8zD2IB6VcxUcojiqkwvFo";
+						String openid="ohqTZ0d8zD2IB6VcxUcojiqkwvFo";//指定用户
 						//模板内容
 						String mbnr ="{\"first\": {"+
 				                       "\"value\":\"测试业务\","+
@@ -207,7 +207,20 @@ public class CoreService  {
 						jsonbody=String.format(jsonbody, new Object[]{openid,mbid,mbnr});
 						ar = WechatAPI.sendTemplateMsg(jsonbody);
 
-					}else if (eventKey.equals("99")) {
+					}else if (eventKey.equals("about")) {
+						
+						NewsMessage newsMsg=new NewsMessage(new BaseMessage(requestMap));
+						List<Article> lstArticle=new ArrayList<Article>();
+						Article article = new Article();
+						article.setTitle("关于我");
+						article.setDescription("小小的程序，大大的梦想");
+						article.setUrl("http://david.leanapp.cn");
+						lstArticle.add(article);
+						newsMsg.setArticles(lstArticle);
+						newsMsg.setCount(lstArticle.size());
+						resMsg = MessageUtil.newsMessageToXml(newsMsg);
+						
+				  }else {
 						
 						
 						String content = "用户等待接入。。。";

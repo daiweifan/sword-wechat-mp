@@ -9,10 +9,15 @@
   <groupId>com.david</groupId>
   <artifactId>swrod-wechat-mp</artifactId>
   <version>0.0.1-SNAPSHOT</version>
-  <packaging>jar</packaging>
+  <packaging>war</packaging>
   <name>swrod-wechat-mp</name>
   <description>Spring Boot Demo with wechat MP</description>
-  
+    <properties>  
+    	<java.version>1.8</java.version>  
+   		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>  
+   		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+   		<shiro.version>1.3.2</shiro.version>
+    </properties>
   <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -45,6 +50,20 @@
 		    <groupId>org.springframework.boot</groupId>
 		    <artifactId>spring-boot-starter-cache</artifactId>
 		</dependency>
+		<!-- shiro -->
+   		<dependency>
+           <groupId>org.apache.shiro</groupId>
+           <artifactId>shiro-spring</artifactId>
+           <version>${shiro.version}</version>
+       	</dependency>
+	    <!-- shiro -->
+		<!-- 	    freemarker + shiro（标签） begin-->
+		<dependency>
+		    <groupId>net.mingsoft</groupId>
+		    <artifactId>shiro-freemarker-tags</artifactId>
+		    <version>0.1</version>
+		</dependency>
+		<!-- 	freemarker + shiro（标签） begin -->
 		<!-- https://mvnrepository.com/artifact/org.nutz/nutz -->
 		<dependency>
 		    <groupId>org.nutz</groupId>
@@ -66,8 +85,6 @@
 	<!-- 添加freemarker -->
 
     </dependencies>
-    <properties>  
-    	<java.version>1.8</java.version>  
-   		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>  
-    </properties>
+
+
 </project>

@@ -180,7 +180,7 @@ public class WechatAPI {
 		
 		Menu wdzh = new Menu("测试功能");
 	
-
+		Menu about = new Menu("关于我", EventType.CLICK.name(), "about");
 		Menu djsj = new Menu("点击事件", EventType.CLICK.name(), "11");
 		Menu fsmbxx = new Menu("发送模板信息", EventType.CLICK.name(), "12");
 /*		Menu dwzhbd = new Menu("单位账户绑定", EventType.VIEW.name(), String.format(WxConsts.WX_OAUTH2_URL, WxConsts.APPID,
@@ -191,15 +191,14 @@ public class WechatAPI {
 				URLEncoder.encode(WxConsts.APPDOMAIN + "/wx_oauth2_qinghai.do")));
 		Menu zhjb = new Menu("账户解绑", EventType.VIEW.name(), String.format(WxConsts.WX_OAUTH2_URL, WxConsts.APPID,
 				URLEncoder.encode(WxConsts.APPDOMAIN + "/gjj_logout.do")));*/
-		wdzh.setSub_button(Arrays.asList(djsj,fsmbxx));
+		wdzh.setSub_button(Arrays.asList(about,djsj,fsmbxx));
 		
 		
-		Menu wgjj = new Menu("业务指南"); 
-		Menu zxzc = new Menu("最新政策", EventType.VIEW.name(), WxConsts.APPDOMAIN + "/gjj_ywzn_zxzc.do");
-		Menu ywzc = new Menu("业务政策", EventType.VIEW.name(), WxConsts.APPDOMAIN + "/gjj_ywzn_first.do?id=369&type=业务政策&top=1");
-		Menu bslc = new Menu("办事流程", EventType.VIEW.name(), WxConsts.APPDOMAIN + "/gjj_ywzn_first.do?id=370&type=办事流程&top=1");
-		Menu wdcx = new Menu("网点查询", EventType.VIEW.name(), WxConsts.APPDOMAIN + "/gjj_ywzn_first.do?id=371&type=网点查询&top=1");
-		wgjj.setSub_button(Arrays.asList(zxzc, ywzc, bslc, wdcx)); 
+		Menu wgjj = new Menu("业务模块"); 
+		Menu register = new Menu("注册", EventType.VIEW.name(), WxConsts.APPDOMAIN + "/example/register");
+		Menu login = new Menu("登录", EventType.VIEW.name(), WxConsts.APPDOMAIN + "/example/login");
+		Menu home = new Menu("主页", EventType.VIEW.name(), WxConsts.APPDOMAIN + "/example/home");
+		wgjj.setSub_button(Arrays.asList(register,login,home)); 
 		
 
 		
@@ -226,7 +225,7 @@ public class WechatAPI {
 		ApiResult ar = ApiResult.create(httpRequest(url, "GET", null));
 
 		if (ar.isSuccess()) {
-			log.info("获取OPENID成功！");
+			log.info("获取OPENID成功！{}",ar.getContent().get("openid"));
 			return String.valueOf(ar.getContent().get("openid"));
 		}
 
