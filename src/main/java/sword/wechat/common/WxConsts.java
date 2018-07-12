@@ -1,10 +1,14 @@
 package sword.wechat.common;
 
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+
 /**
  * 微信使用常量
  * @author 
  *
  */
+@Component
 public class WxConsts {
 	
 	public static int connectTimeout = 3000;
@@ -12,12 +16,32 @@ public class WxConsts {
 	public static int hessianConnectTimeout = 5000;
 	public static int hessianReadTimeout = 60000;
 	
-	public static String APPID="wx8110a8b1450afc40";
-	public static String APPSECRET="bb3e7c8a0644bd3eb62a9859faba9a5d";
-	public static String APPDOMAIN="http://david.free.ngrok.cc";
-	public static String token ="david";
+	public static String APPID;
+	public static String APPSECRET;
+	public static String APPDOMAIN;
+	public static String token;
 	
-		
+	
+	@Value("${sword.appid}")
+	public void setAPPID(String APPID){
+		this.APPID=APPID;
+	}
+	
+	@Value("${sword.appsecret}")
+	public void setAPPSECRET(String APPSECRET){
+		this.APPSECRET=APPSECRET;
+	}
+	
+	@Value("${sword.appdomain}")
+	public void setAPPDOMAIN(String APPDOMAIN){
+		this.APPDOMAIN=APPDOMAIN;
+	}
+	
+	@Value("${sword.token}")
+	public void setToken(String token){
+		this.token=token;
+	}
+	
 	//微信OAUTH2URL
 	public static String WX_OAUTH2_URL="https://open.weixin.qq.com/connect/oauth2/authorize?appid=%s&redirect_uri=%s&response_type=code&scope=snsapi_userinfo&state=1#wechat_redirect";
 	
